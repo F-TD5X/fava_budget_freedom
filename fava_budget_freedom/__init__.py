@@ -63,15 +63,31 @@ class BudgetFreedom(FavaExtensionBase):
         }
 
     def _generate_report_rows(self, budgets, entries, report_start, report_end, time_percent, usage_calculator, budget_calculator):
+        # Filter budgets to only include those active during the report period
+        filtered_budgets = {}
+        for pattern, budget_list in budgets.items():
+            # Get the latest budget for this pattern
+            latest_budget = budget_list[-1]
+            
+            # Check if the budget is active during the report period
+            # For monthly budgets: must be defined in the same year as report_start
+            # For yearly budgets: must be defined in the same year as report_start
+            # For other periods: more lenient (can span across years)
+            if latest_budget['period'] in ['monthly', 'yearly']:
+                if latest_budget['date'].year != report_start.year:
+                    continue  # Skip this budget as it's not active for this year
+            
+            filtered_budgets[pattern] = budget_list
+        
         # Pre-calculate usages to ensure each transaction counts only towards the most specific budget
-        usage_map = usage_calculator.calculate_all_usages(entries, budgets, report_start, report_end)
+        usage_map = usage_calculator.calculate_all_usages(entries, filtered_budgets, report_start, report_end)
         
         # First pass: Calculate initial effective budgets for all patterns
         effective_budgets = {}
         rollovers = {}
         latest_budgets = {}
         
-        for pattern, budget_list in budgets.items():
+        for pattern, budget_list in filtered_budgets.items():
             latest_budgets[pattern] = budget_list[-1]
             eff_budget, rollover = budget_calculator.calculate_effective_budget(
                 budget_list, report_start, report_end
@@ -114,7 +130,7 @@ class BudgetFreedom(FavaExtensionBase):
             adjusted_budgets[parent_pattern] = Amount(new_amount, parent_budget.currency)
 
         report_data = []
-        for pattern in budgets:
+        for pattern in filtered_budgets:
             latest_budget = latest_budgets[pattern]
             effective_budget = adjusted_budgets[pattern]
             gross_budget = effective_budgets[pattern]
