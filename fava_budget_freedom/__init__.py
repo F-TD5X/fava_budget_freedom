@@ -54,6 +54,33 @@ class BudgetFreedom(FavaExtensionBase):
                 total_budget_row = row
             else:
                 final_report_data.append(row)
+        
+        # If no Expenses:* pattern found, calculate total from all configured budgets
+        if total_budget_row is None and final_report_data:
+            # Determine currency from first row
+            first_row = final_report_data[0]
+            currency = first_row['budget'].currency
+            
+            total_unadjusted_budget = Decimal(0)
+            total_actual_amount = Decimal(0)
+            
+            for row in final_report_data:
+                if row['budget'].currency == currency:
+                    total_unadjusted_budget += row['unadjusted_budget'].number
+                    total_actual_amount += row['total_actual'].number if row['total_actual'].number is not None else Decimal(0)
+            
+            unadjusted_percent = 0
+            if total_unadjusted_budget != 0:
+                unadjusted_percent = (total_actual_amount / total_unadjusted_budget) * 100
+            
+            total_budget_row = {
+                'pattern': 'Total',
+                'account_name': 'Expenses',
+                'unadjusted_budget': Amount(total_unadjusted_budget, currency),
+                'total_actual': Amount(total_actual_amount, currency),
+                'unadjusted_percent': unadjusted_percent,
+                'time_percent': time_percent
+            }
             
         return {
             'report_data': final_report_data,
