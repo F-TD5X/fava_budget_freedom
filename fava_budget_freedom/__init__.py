@@ -109,6 +109,9 @@ class BudgetFreedom(FavaExtensionBase):
         # Pre-calculate usages to ensure each transaction counts only towards the most specific budget
         usage_map = usage_calculator.calculate_all_usages(entries, filtered_budgets, report_start, report_end)
         
+        # Calculate amortization details for sub-items
+        amortization_details = usage_calculator.calculate_amortization_details(entries, filtered_budgets, report_start, report_end)
+        
         # First pass: Calculate initial effective budgets for all patterns
         effective_budgets = {}
         rollovers = {}
@@ -183,6 +186,17 @@ class BudgetFreedom(FavaExtensionBase):
                 gross_percent = (total_actual_val / gross_budget.number) * 100
             
             account_name = clean_pattern_for_link(pattern)
+            
+            # Get amortization sub-items for this pattern
+            amortization_items = []
+            if pattern in amortization_details:
+                for amort_account, inventory in amortization_details[pattern].items():
+                    amort_amount = inventory.get_currency_units(effective_budget.currency)
+                    if amort_amount.number and amort_amount.number > 0:
+                        amortization_items.append({
+                            'account': amort_account,
+                            'amount': amort_amount
+                        })
 
             report_data.append({
                 'pattern': pattern,
@@ -196,7 +210,8 @@ class BudgetFreedom(FavaExtensionBase):
                 'time_percent': time_percent,
                 'period': latest_budget['period'],
                 'rollover': rollover,
-                'is_rollover': latest_budget['rollover']
+                'is_rollover': latest_budget['rollover'],
+                'amortization_items': amortization_items
             })
         return report_data
 

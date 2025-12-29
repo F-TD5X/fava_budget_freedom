@@ -73,6 +73,18 @@
           </div>
         </td>
       </tr>
+      {% if row.amortization_items %}
+        {% for item in row.amortization_items %}
+      <tr style="background-color: var(--sidebar-background); font-size: 0.9em;">
+        <td style="padding-left: 2em; color: var(--text-color-lighter);">
+          <span style="color: var(--text-color-lighter);">↳ <a href="{{ url_for('account', name=item.account) }}" onclick="window.open(this.href); return false;" style="color: var(--text-color-lighter); text-decoration: underline;">{{ item.account }}</a></span>
+        </td>
+        <td colspan="3" style="color: var(--text-color-lighter);">amortize</td>
+        <td class="num" style="color: var(--text-color-lighter);">{{ "%.2f"|format(item.amount.number) }} {{ item.amount.currency }}</td>
+        <td colspan="2"></td>
+      </tr>
+        {% endfor %}
+      {% endif %}
       {% endfor %}
     </tbody>
   </table>
