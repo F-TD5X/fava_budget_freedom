@@ -14,6 +14,10 @@ Fava Budget Freedom is a [Fava](https://beancount.github.io/fava/) extension plu
 - **Smart Time Ranges**: Supports Fava's time filtering, defaulting to year-to-date (YTD) budget execution.
 - **Interactive Reports**: Click on account patterns to jump directly to the corresponding account detail page.
 
+## Screenshot
+
+![Budget Freedom Screenshot](assets/screenshot.png)
+
 ## Usage
 
 ### 1. Install the Plugin
