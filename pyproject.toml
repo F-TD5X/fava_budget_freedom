@@ -16,3 +16,9 @@ dependencies = [
 
 [project.entry-points."fava.plugins"]
 "fava_budget_freedom" = "fava_budget_freedom:BudgetFreedom"
+
+[tool.setuptools]
+packages = ["fava_budget_freedom"]
+
+[tool.setuptools.package-data]
+fava_budget_freedom = ["templates/*.html"]
