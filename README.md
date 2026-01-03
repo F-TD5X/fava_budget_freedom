@@ -40,22 +40,6 @@ Ensure that `fava_budget_freedom` is available in your Python environment after 
 
 Load the plugin in your `.beancount` file:
 
-```bash
-pip install git+https://github.com/Leon2xiaowu/fava_budget_freedom.git
-```
-
-Or, if you have downloaded the source code, install from the source directory:
-
-```bash
-pip install .
-```
-
-Ensure that `fava_budget_freedom` is available in your Python environment after installation.
-
-### 2. Configure Beancount
-
-Load the plugin in your `.beancount` file:
-
 ```beancount
 2025-01-01 custom "fava-extension" "fava_budget_freedom"
 ```
