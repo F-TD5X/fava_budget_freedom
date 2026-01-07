@@ -63,13 +63,13 @@ YYYY-MM-DD custom "budget" "AccountPattern" "Period" "Amount Currency" ["rollove
 
 ```beancount
 ; 每月餐饮预算 2000 USD，开启滚存
-2025-01-01 custom "budget" "Expenses:Food:*" "monthly" "2000 USD" "rollover"
+2025-01-01 custom "budget" "Expenses:Food:*" "monthly" 2000 USD "rollover"
 
 ; 每周书籍预算 20 EUR
-2025-01-01 custom "budget" "Expenses:Books" "weekly" "20.00 EUR"
+2025-01-01 custom "budget" "Expenses:Books" "weekly" 20.00 EUR
 
 ; 年度旅行预算 2500 EUR
-2025-01-01 custom "budget" "Expenses:Holiday" "yearly" "2500.00 EUR"
+2025-01-01 custom "budget" "Expenses:Holiday" "yearly" 2500.00 EUR
 ```
 
 ### 4. 折旧分摊支持
@@ -89,7 +89,7 @@ YYYY-MM-DD custom "budget" "AccountPattern" "Period" "Amount Currency" ["rollove
 plugin "beancount_periodic.amortize" "{'generate_until':'today'}"
 
 ; 定义房租预算
-2025-01-01 custom "budget" "Expenses:Home:Rent" "yearly" "12000 USD"
+2025-01-01 custom "budget" "Expenses:Home:Rent" "yearly" 12000 USD
 
 ; 一次性支付年度房租，分摊到12个月
 2025-10-03 * "Landlord" "Annual Rent Payment"

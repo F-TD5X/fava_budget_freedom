@@ -63,13 +63,13 @@ YYYY-MM-DD custom "budget" "AccountPattern" "Period" "Amount Currency" ["rollove
 
 ```beancount
 ; Monthly food budget of 2000 USD with rollover enabled
-2025-01-01 custom "budget" "Expenses:Food:*" "monthly" "2000 USD" "rollover"
+2025-01-01 custom "budget" "Expenses:Food:*" "monthly" 2000 USD "rollover"
 
 ; Weekly books budget of 20 EUR
-2025-01-01 custom "budget" "Expenses:Books" "weekly" "20.00 EUR"
+2025-01-01 custom "budget" "Expenses:Books" "weekly" 20.00 EUR
 
 ; Annual holiday budget of 2500 EUR
-2025-01-01 custom "budget" "Expenses:Holiday" "yearly" "2500.00 EUR"
+2025-01-01 custom "budget" "Expenses:Holiday" "yearly" 2500.00 EUR
 ```
 
 ### 4. Amortization Support
@@ -89,7 +89,7 @@ The plugin works seamlessly with the `beancount_periodic.amortize` plugin to int
 plugin "beancount_periodic.amortize" "{'generate_until':'today'}"
 
 ; Define rent budget
-2025-01-01 custom "budget" "Expenses:Home:Rent" "yearly" "12000 USD"
+2025-01-01 custom "budget" "Expenses:Home:Rent" "yearly" 12000 USD
 
 ; One-time annual rent payment, amortized over 12 months
 2025-10-03 * "Landlord" "Annual Rent Payment"
