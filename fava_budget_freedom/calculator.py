@@ -94,6 +94,8 @@ class BudgetCalculator:
     def _calculate_period_budget(self, budget_list, report_start, report_end):
         period_budget_accumulator = Decimal(0)
         report_end_exclusive = report_end + timedelta(days=1)
+        today = date.today()
+        current_month_start = get_period_start(today, 'monthly')
 
         for index, budget in enumerate(budget_list):
             segment_start = max(budget['effective_date'], report_start)
@@ -109,6 +111,38 @@ class BudgetCalculator:
             for period_start in iter_period_starts(
                 budget['period'], segment_start, segment_end_inclusive
             ):
+                if budget['period'] == 'monthly' and not budget['rollover']:
+                    period_budget_accumulator += (
+                        self._calculate_non_rollover_monthly_budget(
+                            budget, period_start, report_end, today, current_month_start
+                        )
+                    )
+                    continue
+
                 period_budget_accumulator += budget['amount'].number
 
         return period_budget_accumulator
+
+    def _calculate_non_rollover_monthly_budget(
+        self, budget, month_start, report_end, today, current_month_start
+    ):
+        month_end = get_next_period_start(month_start, 'monthly')
+
+        if report_end < today or month_start < current_month_start:
+            actual_amount = self.usage_calculator.calculate_usage_for_period(
+                month_start,
+                month_end,
+                budget['pattern'],
+                budget['amount'].currency,
+            )
+            actual_number = (
+                actual_amount.number
+                if actual_amount.number is not None
+                else Decimal(0)
+            )
+            return min(max(actual_number, Decimal(0)), budget['amount'].number)
+
+        if month_start == current_month_start and report_end >= today:
+            return budget['amount'].number
+
+        return Decimal(0)

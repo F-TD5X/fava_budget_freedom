@@ -65,6 +65,7 @@ YYYY-MM-DD custom "budget" "AccountPattern" "Period" "Amount Currency" ["rollove
 - 一条预算指令会持续生效，直到同一模式下有更新的指令替换它。
 - 只要某个月、周、季度或年度与当前 Fava 选择的时间范围有重叠，就会计入一个完整预算周期。
 - 如果预算指令落在周期中途，则从下一个完整周期边界开始生效。
+- 对于未开启 `rollover` 的 `monthly` 预算，在跨月视图中会显示“已结束月份的已用预算 + 当前月份完整预算”。
 
 **示例：**
 

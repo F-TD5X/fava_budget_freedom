@@ -65,6 +65,7 @@ Budget semantics:
 - A budget directive remains active until a later directive for the same pattern replaces it.
 - Any month, week, quarter, or year overlapping the selected Fava range contributes one full budget period.
 - If a budget directive is dated mid-period, it starts from the next full period boundary.
+- For `monthly` budgets without `rollover`, multi-month views use consumed budget from completed months plus the full budget for the current month.
 
 **Examples:**
 
